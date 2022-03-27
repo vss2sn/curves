@@ -1,3 +1,5 @@
+#ifndef CUBIC_HERMITE_SPLINE_HPP
+#define CUBIC_HERMITE_SPLINE_HPP
 
 #include <array>
 #include <iostream>
@@ -43,3 +45,5 @@ private:
   std::array<Point<dimensions>, n_points + 1> points;
   std::array<Point<dimensions>, 4> p;
 };
+
+#endif  // CUBIC_HERMITE_SPLINE_HPP

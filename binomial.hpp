@@ -1,3 +1,6 @@
+#ifndef BINOMAIAL_HPP
+#define BINOMAIAL_HPP
+
 #include <array>
 #include <iostream>
 
@@ -67,6 +70,8 @@ void compile_time_for() {
     compile_time_for<start+1, end>();
   }
 }
+
+#endif  // BINOMAIAL_HPP
 
 // int main() {
 //   constexpr int N = 5;

@@ -1,3 +1,6 @@
+#ifndef BEZIER_CURVE_HPP
+#define BEZIER_CURVE_HPP
+
 #include "binomial.hpp"
 #include "utils.hpp"
 
@@ -47,3 +50,5 @@ private:
   std::array<Point<dimensions>, n_points + 1> points;
   std::array<float, n_points + 1> coefficients;
 };
+
+#endif  // BEZIER_CURVE_HPP

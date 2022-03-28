@@ -10,11 +10,11 @@
 template <size_t dimensions>
 std::array<Point<dimensions>, 4> convertHermitePointsToBezierPoints(const std::array<Point<dimensions>, 4>& p) {
 
-  constexpr std::array<std::array<float, 4>, 4> conversion_matrix = {
-    std::array<float, 4>{1, 0, 0, 0 },
-    std::array<float, 4>{1, 0, 1./3, 0},
-    std::array<float, 4>{0, 1, 0, -1./3},
-    std::array<float, 4>{0, 1, 0, 0}
+  constexpr std::array<std::array<double, 4>, 4> conversion_matrix = {
+    std::array<double, 4>{1, 0, 0, 0 },
+    std::array<double, 4>{1, 0, 1./3, 0},
+    std::array<double, 4>{0, 1, 0, -1./3},
+    std::array<double, 4>{0, 1, 0, 0}
   };
 
   std::array<Point<dimensions>, 4> ans;
@@ -32,11 +32,11 @@ std::array<Point<dimensions>, 4> convertHermitePointsToBezierPoints(const std::a
 template <size_t dimensions>
 std::array<Point<dimensions>, 4> convertBezierPointsToHermitePoints(const std::array<Point<dimensions>, 4>& p) {
 
-  constexpr std::array<std::array<float, 4>, 4> conversion_matrix = {
-    std::array<float, 4>{1, 0, 0, 0 },
-    std::array<float, 4>{0, 0, 0, 1},
-    std::array<float, 4>{-3, 3, 0, 0},
-    std::array<float, 4>{0, 0, -3, 3}
+  constexpr std::array<std::array<double, 4>, 4> conversion_matrix = {
+    std::array<double, 4>{1, 0, 0, 0 },
+    std::array<double, 4>{0, 0, 0, 1},
+    std::array<double, 4>{-3, 3, 0, 0},
+    std::array<double, 4>{0, 0, -3, 3}
   };
 
   std::array<Point<dimensions>, 4> ans;

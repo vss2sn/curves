@@ -88,7 +88,7 @@ int main() {
       Point<dimensions>{1, 1.5}
   };
 
-  const float tao = 0.5;
+  const double tao = 0.5;
   CatmullRomSpline<N, n_points, dimensions> cms(p, tao);
   cms.print();
 

@@ -4,6 +4,6 @@
 #include <array>
 
 template<size_t N>
-using Point = std::array<float, N>;
+using Point = std::array<double, N>;
 
 #endif  // UTILS_H

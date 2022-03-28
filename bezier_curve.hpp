@@ -32,7 +32,7 @@ void print() {
 private:
   std::array<Point<dimensions>, degree + 1> weights;
   std::array<Point<dimensions>, n_points + 1> points;
-  std::array<float, n_points + 1> coefficients;
+  std::array<double, n_points + 1> coefficients;
 };
 
 #endif  // BEZIER_CURVE_HPP

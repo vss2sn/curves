@@ -74,7 +74,7 @@ void compile_time_for() {
 template<size_t N>
 struct BinomialParamterValues {
 public:
-  explicit BinomialParamterValues(const float t) noexcept {
+  explicit BinomialParamterValues(const double t) noexcept {
     t_values[0] = 1;
     one_minus_t_values[N] = 1;
     for (int i = 1; i <= N; i++) {
@@ -83,8 +83,8 @@ public:
     }
   }
 
-  std::array<float, N+1> t_values;
-  std::array<float, N+1> one_minus_t_values;
+  std::array<double, N+1> t_values;
+  std::array<double, N+1> one_minus_t_values;
 };
 
 #endif  // BINOMAIAL_HPP

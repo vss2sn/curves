@@ -7,14 +7,14 @@
 #include "utils.hpp"
 
 template<size_t N>
-using Point = std::array<float, N>;
+using Point = std::array<double, N>;
 
 template<size_t n_points, size_t dimensions>
 class CubicHermiteSpline {
 public:
   explicit CubicHermiteSpline(std::array<Point<dimensions>, 4>& p) noexcept : p(p) {
-    const float delta_u = 1./n_points;
-    float u = 0;
+    const double delta_u = 1./n_points;
+    double u = 0;
     for (int i = 0; i <= n_points; i++) {
       const auto u2 = u * u;
       const auto u3 = u2 * u;
@@ -41,7 +41,7 @@ public:
     }
   }
 private:
-  std::array<std::array<float, 4>, n_points + 1> coefficients;
+  std::array<std::array<double, 4>, n_points + 1> coefficients;
   std::array<Point<dimensions>, n_points + 1> points;
   std::array<Point<dimensions>, 4> p;
 };

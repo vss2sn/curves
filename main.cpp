@@ -55,7 +55,7 @@ int main() {
   BezierCurve<3, n_points, dimensions> b (weights);
   b.print();
   std::cout << '\n';
-
+  
   std::array<Point<dimensions>, 4>  hermite_points = convertBezierPointsToHermitePoints(weights);
   print(hermite_points);
   CubicHermiteSpline<n_points, dimensions> hs (hermite_points);

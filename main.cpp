@@ -4,6 +4,7 @@
 #include "cubic_hermite_spline.hpp"
 #include "catmull_rom_spline.hpp"
 #include "curve_conversion.hpp"
+#include "polynomials.hpp"
 
 template<size_t dimensions>
 void print(std::array<Point<dimensions>, 4>& a){
@@ -72,25 +73,40 @@ void print(std::array<Point<dimensions>, 4>& a){
 //   return 0
 // }
 
-int main() {
-  constexpr int n_points = 10;
-  constexpr int dimensions = 2;
-  constexpr int N = 9;
-  std::array<Point<dimensions>, N> p = {
-      Point<dimensions>{-1., -1.5},
-      Point<dimensions>{0, 0.5},
-      Point<dimensions>{1, 1.5},
-      Point<dimensions>{4, 3.2},
-      Point<dimensions>{3.5, -0.1},
-      Point<dimensions>{2.5, 0.7},
-      Point<dimensions>{-1., -1.5},
-      Point<dimensions>{0, 0.5},
-      Point<dimensions>{1, 1.5}
-  };
+// int main() {
+//   constexpr int n_points = 10;
+//   constexpr int dimensions = 2;
+//   constexpr int N = 7;
+//
+//   std::array<Point<dimensions>, N> p = {
+//       // Point<dimensions>{-4., 1.},
+//       Point<dimensions>{-4., 1.},
+//       Point<dimensions>{-4., 1.},
+//       Point<dimensions>{-2., -2.},
+//       Point<dimensions>{0, 0},
+//       Point<dimensions>{2, -3},
+//       Point<dimensions>{3, 1},
+//       Point<dimensions>{3, 1},
+//       // Point<dimensions>{3, 1},
+//   };
+//
+//   const double tao = 1;
+//   CatmullRomSpline<N, n_points, dimensions> cms(p, tao);
+//   cms.print();
+//
+//   return 0;
+// }
 
-  const double tao = 0.5;
-  CatmullRomSpline<N, n_points, dimensions> cms(p, tao);
-  cms.print();
-
-  return 0;
+int main () {
+  constexpr size_t N = 2;
+  auto p = Polynomial<N>({2,3,1});
+  std::cout << p.get_value(0) << '\n';
+  std::cout << p.get_value(1) << '\n';
+  std::cout << p.get_value(2) << '\n';
+  std::cout << p.get_value(3) << '\n';
+  p.print();
+  auto p_d = p.get_derivative();
+  p_d.print();
+  auto p_dd = p_d.get_derivative();
+  p_dd.print();
 }

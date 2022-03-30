@@ -58,7 +58,7 @@ private:
 template<>
 class Polynomial<0> {
 public:
-  explicit Polynomial(const std::array<double, 1>& coefficients = {}) : coefficients(coefficients) {}
+  explicit Polynomial(const std::array<double, 1>& coefficients = {0}) : coefficients(coefficients) {}
 
   double get_value(const double x) {
     return coefficients[0];
@@ -92,7 +92,7 @@ template<size_t degree>
 std::array<std::array<double, degree+1>, degree+1> get_coefficients_of_poly_and_all_derivatives(Polynomial<degree>& poly) {
   std::cout << "Degree " << degree << '\n';
   std::array<std::array<double, degree+1>, degree+1> ans;
-  poly.print();
+  // poly.print();
   ans[0] = poly.get_coefficients();
   auto poly_d = poly.get_derivative();
   auto lower_order_coeffs = get_coefficients_of_poly_and_all_derivatives(poly_d);
@@ -104,19 +104,19 @@ std::array<std::array<double, degree+1>, degree+1> get_coefficients_of_poly_and_
       ans[row][col] = 0;
     }
   }
-  print(ans);
+  // print(ans);
   std::cout << "Degree " << degree << '\n';
   return ans;
 }
 
 template<>
 std::array<std::array<double, 1>, 1> get_coefficients_of_poly_and_all_derivatives<0>(Polynomial<0>& poly) {
-  std::cout << "Degree " << 0 << '\n';
+  // std::cout << "Degree " << 0 << '\n';
   poly.print();
-  std::array<std::array<double, 1>, 1> ans;
-  print(ans);
-  std::cout << "Degree " << 0 << '\n';
-  return ans;
+  // std::array<std::array<double, 1>, 1> ans;
+  // print(ans);
+  // std::cout << "Degree " << 0 << '\n';
+  return {0};
 }
 
 #endif  // POLYNOMIALS_HPP

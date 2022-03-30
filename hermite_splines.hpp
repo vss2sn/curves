@@ -22,12 +22,12 @@ private:
 
   template<size_t I>
   void compile_for(std::array<std::array<double, degree+1>, degree+1>& coeffecient_matrix_of_p_to_dnp) {
-    if constexpr  (degree <=I) {
+    if constexpr  ((degree + 1)/2 <= I) {
       return;
     } else {
       auto poly_at_i = Polynomial<degree>(coeffecient_matrix_of_p_to_dnp[I]);
-      std::cout << I << ": ";
-      poly_at_i.print();
+      // std::cout << I << ": ";
+      // poly_at_i.print();
       coefficients[2*I] = poly_at_i.get_component_value(0.);
       coefficients[2*I+1] = poly_at_i.get_component_value(1.);
       compile_for<I+1>(coeffecient_matrix_of_p_to_dnp);

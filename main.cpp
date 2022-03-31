@@ -1,7 +1,7 @@
 #include <iostream>
 
 // #include "bezier_curve.hpp"
-// #include "cubic_hermite_spline.hpp"
+#include "cubic_hermite_spline.hpp"
 // #include "catmull_rom_spline.hpp"
 // #include "curve_conversion.hpp"
 #include "hermite_splines.hpp"
@@ -90,19 +90,21 @@
 
 int main () {
   constexpr size_t degree = 3;
-  auto h = HermiteSplines<degree, 1>({1,1,1,1});
+  constexpr size_t dimensions = 2;
+  constexpr size_t n_points = 10;
+  std::array<Point<dimensions>, 4> p = {
+    Point<dimensions>{0., 0.},
+    Point<dimensions>{4., 1.},
+    Point<dimensions>{0., 1.},
+    Point<dimensions>{0., 1.},
+  };
+
+  auto chs = CubicHermiteSpline<n_points, dimensions>(p);
+  auto hs = HermiteSplines<degree, n_points, dimensions>(p);
+  std::cout << "Cubic Hermite Spline" << '\n';
+  chs.print();
+  std::cout << "Hermite Spline" << '\n';
+  hs.print_local();
   std::cout << "Main done" << '\n';
   return 0;
-  // auto temp = get_coefficients_of_poly_and_all_derivatives(p);
-  // std::cout << __FILE__ << ' ' << __FUNCTION__ << ' ' << __LINE__ << '\n';
-  // print(temp);
-  // std::cout << p.get_value(0) << '\n';
-  // std::cout << p.get_value(1) << '\n';
-  // std::cout << p.get_value(2) << '\n';
-  // std::cout << p.get_value(3) << '\n';
-  // p.print();
-  // auto p_d = p.get_derivative();
-  // p_d.print();
-  // auto p_dd = p_d.get_derivative();
-  // p_dd.print();
 }

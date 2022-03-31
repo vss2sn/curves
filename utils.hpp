@@ -38,19 +38,8 @@ std::array<std::array<double, N>, N> inverse_using_LU_decomp(std::array<std::arr
       }
     }
 
-    if (max_idx != i) {
-      try{
-        std::swap(mat[i], mat[max_idx]);
-      } catch(...) {
-
-      }
-      try {
-        std::swap(p[i], p[max_idx]);
-      }
-      catch(...) {
-
-      }
-    }
+    std::swap(mat[i], mat[max_idx]);
+    std::swap(p[i], p[max_idx]);
 
     for (int j = i+1; j < N; j++) {
       mat[j][i] /= mat[i][i];
@@ -70,7 +59,6 @@ std::array<std::array<double, N>, N> inverse_using_LU_decomp(std::array<std::arr
         b[j] = 0;
       }
     }
-
 
     auto temp = b;
     for (int i = 0; i < N; i++) {

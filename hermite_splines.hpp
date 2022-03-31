@@ -45,19 +45,18 @@ public:
 private:
   std::array<Point<dimensions>, degree + 1> p;
   std::array<std::array<double, degree+1>, n_points + 1> coefficients;
-  std::array<Point<dimensions>, n_points + 1> points;
   std::array<std::array<double, degree+1>, degree+1> coefficients_of_basis_curves;
+  std::array<Point<dimensions>, n_points + 1> points;
 
   void calculate_coefficients() {
     std::array<double, degree+1> coeffs_for_ploy;
     std::fill(coeffs_for_ploy.begin(), coeffs_for_ploy.end(), 1);
-    std::array<Polynomial<degree>, degree+1> polys;
     Polynomial<degree> poly(coeffs_for_ploy);
+    std::array<Polynomial<degree>, degree+1> polys;
     auto coeffecient_matrix_of_p_to_dnp = get_coefficients_of_poly_and_all_derivatives(poly); // dnp = (d)^n p
     std::array<std::array<double, degree+1>, degree+1> coeffs;
     compile_for<0>(coeffecient_matrix_of_p_to_dnp, coeffs);
-    auto inv = inverse_using_LU_decomp(coeffs);
-    coefficients_of_basis_curves = inv;
+    coefficients_of_basis_curves = inverse_using_LU_decomp(coeffs);
   }
 
   template<size_t I>

@@ -11,36 +11,29 @@ public:
     calculate_coefficients();
     const double delta_u = 1./n_points;
     double u = 0;
-    std::cout << __LINE__ << '\n';
     std::array<double, degree+1> powers_of_u;
-    std::cout << __LINE__ << '\n';
     for (int i = 0; i <= n_points; i++) {
       powers_of_u[degree] = 1;
-      std::cout << __LINE__ << '\n';
       for (int i = degree-1; i >=0; i--) {
         powers_of_u[i] = powers_of_u[i+1] * u;
       }
-      std::cout << __LINE__ << '\n';
       for (int m = 0; m < degree+1; m++) {
         coefficients[i][m] = 0;
         for (int n = 0; n < degree+1; n++) {
           coefficients[i][m] += powers_of_u[n] * coefficients_of_basis_curves[n][m];
         }
       }
-      std::cout << __LINE__ << '\n';
       for (int j = 0; j < dimensions; j++) {
         points[i][j] = 0;
         for (int k = 0; k < degree+1; k++) {
           points[i][j] += coefficients[i][k] * p[k][j];
         }
       }
-      std::cout << __LINE__ << '\n';
       u += delta_u;
     }
   }
 
-  void print_local() {
-    for (const auto& p : points) {
+  void print() for (const auto& p : points) {
       for (int j = 0; j < dimensions; j++) {
         std::cout << p[j] << ", ";
       }
@@ -64,9 +57,6 @@ private:
     compile_for<0>(coeffecient_matrix_of_p_to_dnp, coeffs);
     auto inv = inverse_using_LU_decomp(coeffs);
     coefficients_of_basis_curves = inv;
-    std::cout << "coefficients_of_basis_curves" << '\n';
-    print(coefficients_of_basis_curves);
-    std::cout << __LINE__ << '\n';
   }
 
   template<size_t I>
@@ -77,7 +67,6 @@ private:
     if constexpr  (degree < I) {
       return;
     } else {
-      std::cout << I/2 << ' ' << I%2 << '\n';
       std::array<double, degree-I/2 + 1> temp;
       std::copy(
         std::begin(coeffecient_matrix_of_p_to_dnp[I/2]) + I/2,

@@ -100,11 +100,13 @@ int main () {
   };
 
   auto chs = CubicHermiteSpline<n_points, dimensions>(p);
-  auto hs = HermiteSplines<degree, n_points, dimensions>(p);
   std::cout << "Cubic Hermite Spline" << '\n';
   chs.print();
+  std::cout << '\n';
+
+  auto hs = HermiteSplines<degree, n_points, dimensions>(p);
   std::cout << "Hermite Spline" << '\n';
-  hs.print_local();
-  std::cout << "Main done" << '\n';
+  hs.print();
+  std::cout << '\n';
   return 0;
 }

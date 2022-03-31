@@ -90,13 +90,10 @@ private:
 
 template<size_t degree>
 std::array<std::array<double, degree+1>, degree+1> get_coefficients_of_poly_and_all_derivatives(Polynomial<degree>& poly) {
-  std::cout << "Degree " << degree << '\n';
   std::array<std::array<double, degree+1>, degree+1> ans;
-  poly.print();
   ans[0] = poly.get_coefficients();
   auto poly_d = poly.get_derivative();
   auto lower_order_coeffs = get_coefficients_of_poly_and_all_derivatives(poly_d);
-  print(lower_order_coeffs);
   for (int row = 1; row < degree+1; row++) {
     ans[row][0] = 0;
   }
@@ -105,19 +102,12 @@ std::array<std::array<double, degree+1>, degree+1> get_coefficients_of_poly_and_
       ans[row][col] = lower_order_coeffs[row - 1][col-1];
     }
   }
-  std::cout << "Current coeff matrix:" << '\n';
-  print(ans);
-  std::cout << "Degree " << degree << '\n';
   return ans;
 }
 
 template<>
 std::array<std::array<double, 1>, 1> get_coefficients_of_poly_and_all_derivatives<0>(Polynomial<0>& poly) {
-  std::cout << "Degree " << 0 << '\n';
-  poly.print();
   std::array<std::array<double, 1>, 1> ans;
-  print(ans);
-  std::cout << "Degree " << 0 << '\n';
   return ans;
 }
 

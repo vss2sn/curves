@@ -89,8 +89,8 @@
 // }
 
 int main () {
-  constexpr size_t degree = 4;
-  auto h = HermiteSplines<degree,1>({1,1,1,1,1});
+  constexpr size_t degree = 3;
+  auto h = HermiteSplines<degree, 1>({1,1,1,1});
   std::cout << "Main done" << '\n';
   return 0;
   // auto temp = get_coefficients_of_poly_and_all_derivatives(p);

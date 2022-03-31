@@ -13,6 +13,8 @@ public:
     auto coeffecient_matrix_of_p_to_dnp = get_coefficients_of_poly_and_all_derivatives(poly); // dnp = (d)^n p
     compile_for<0>(coeffecient_matrix_of_p_to_dnp);
     print(coefficients);
+    auto inv = inverse_using_LU_decomp(coefficients);
+    print(inv);
     std::cout << "Done" << '\n';
   }
 
@@ -43,7 +45,4 @@ private:
       compile_for<I+1>(coeffecient_matrix_of_p_to_dnp);
     }
   }
-
-  // template<>
-  // void compile_for<(degree+1)/2>(std::array<std::array<double, degree+1>, degree+1>& coeffecient_matrix_of_p_to_dnp) {}
 };

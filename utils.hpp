@@ -1,6 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
-
+#include <algorithm>
+#include <numeric>
 #include <array>
 #include <iostream>
 
@@ -30,6 +31,84 @@ void print(std::array<std::array<double, N>, M>& a){
     std::cout << ")\n";
   }
   std::cout << '\n';
+}
+
+template<size_t N>
+std::array<std::array<double, N>, N> inverse_using_LU_decomp(std::array<std::array<double, N>, N> mat) {
+  std::array<std::array<double, N>, N> p;
+  std::array<std::array<double, N>, N> inversed_data;
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; j < N; j++) {
+      if (i == j) p[i][j] = 1;
+      else p[i][j] = 0;
+    }
+  }
+  for (int i = 0; i < N - 1; i++){
+    auto max_idx = i;
+    for (int k  = i+1; k < N; k++) {
+      if (abs(mat[k][i]) > abs(mat[max_idx][i])) {
+        max_idx = k;
+      }
+    }
+
+    if (max_idx != i) {
+      try{
+        std::swap(mat[i], mat[max_idx]);
+      } catch(...) {
+
+      }
+      try {
+        std::swap(p[i], p[max_idx]);
+      }
+      catch(...) {
+
+      }
+    }
+
+    for (int j = i+1; j < N; j++) {
+      mat[j][i] /= mat[i][i];
+      for (int k = i+1; k < N; k++) {
+        mat[j][k] -= mat[j][i] * mat[i][k];
+      }
+    }
+  }
+
+  std::array<std::array<double, N>, N> inverse;
+  for (int i_main = 0; i_main < N; i_main++) {
+    std::array<double, N> b;
+    for (int j = 0; j < N; j++) {
+      if (i_main == j) {
+        b[j] = 1;
+      } else {
+        b[j] = 0;
+      }
+    }
+
+
+    auto temp = b;
+    for (int i = 0; i < N; i++) {
+      temp[i] = std::inner_product(std::begin(p[i]), std::end(p[i]), std::begin(b), 0.);
+    }
+    b = temp;
+
+    for (int i = 0; i < N-1; i++){
+      for (int j = i+1; j < N; j++)  {
+        b[j] -= mat[j][i] * b[i];
+      }
+    }
+
+    for (int i = N-1; i >=0; i--) {
+      b[i] /= mat[i][i];
+      for (int j = 0; j < i; j++) {
+        b[j] -= mat[j][i] * b[i];
+      }
+    }
+
+    for (int k =0; k < N; k++) {
+      inversed_data[k][i_main] = b[k];
+    }
+  }
+  return inversed_data;
 }
 
 #endif  // UTILS_H

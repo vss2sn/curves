@@ -33,7 +33,8 @@ public:
     }
   }
 
-  void print() for (const auto& p : points) {
+  void print() {
+    for (const auto& p : points) {
       for (int j = 0; j < dimensions; j++) {
         std::cout << p[j] << ", ";
       }

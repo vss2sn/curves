@@ -50,7 +50,6 @@ std::array<std::array<double, N>, N> inverse_using_LU_decomp(std::array<std::arr
     }
   }
 
-  std::array<std::array<double, N>, N> inverse;
   for (int i_main = 0; i_main < N; i_main++) {
     std::array<double, N> b;
     for (int j = 0; j < N; j++) {

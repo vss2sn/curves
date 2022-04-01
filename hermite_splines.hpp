@@ -33,7 +33,7 @@ public:
     }
   }
 
-  void print() {
+  void print() const {
     for (const auto& p : points) {
       for (int j = 0; j < dimensions; j++) {
         std::cout << p[j] << ", ";
@@ -51,21 +51,20 @@ private:
   void calculate_coefficients() {
     std::array<double, degree+1> coeffs_for_ploy;
     std::fill(coeffs_for_ploy.begin(), coeffs_for_ploy.end(), 1);
-    Polynomial<degree> poly(coeffs_for_ploy);
+    const Polynomial<degree> poly(coeffs_for_ploy);
     std::array<Polynomial<degree>, degree+1> polys;
-    auto coeffecient_matrix_of_p_to_dnp = get_coefficients_of_poly_and_all_derivatives(poly); // dnp = (d)^n p
+    const auto coeffecient_matrix_of_p_to_dnp = get_coefficients_of_poly_and_all_derivatives(poly); // dnp = (d)^n p
     std::array<std::array<double, degree+1>, degree+1> coeffs;
     compile_for<0>(coeffecient_matrix_of_p_to_dnp, coeffs);
-    // print(coeffs);
     coefficients_of_basis_curves = inverse_using_LU_decomp(coeffs);
   }
 
   template<size_t I>
   void compile_for(
-    std::array<std::array<double, degree+1>, degree+1>& coeffecient_matrix_of_p_to_dnp,
+    const std::array<std::array<double, degree+1>, degree+1>& coeffecient_matrix_of_p_to_dnp,
     std::array<std::array<double, degree+1>, degree+1>& coeffs
   ) {
-    if constexpr  (degree < I) {
+    if constexpr (degree < I) {
       return;
     } else {
       std::array<double, degree-I/2 + 1> temp;
@@ -74,14 +73,10 @@ private:
         std::end(coeffecient_matrix_of_p_to_dnp[I/2]),
         std::begin(temp)
       );
-      auto poly_at_i = Polynomial<degree - I/2>(temp);
-      auto temp2 = poly_at_i.get_component_value(double(I%2));
-      for (int i = 0; i < temp2.size(); i++) {
-        coeffs[I][i] = temp2[i];
-      }
-      for (int i = temp2.size(); i < coeffs[I].size(); i++) {
-        coeffs[I][i] = 0;
-      }
+      const auto poly_at_i = Polynomial<degree - I/2>(temp);
+      const auto temp2 = poly_at_i.get_component_value(double(I%2));
+      std::copy(std::begin(temp2), std::end(temp2), std::begin(coeffs[I]));
+      std::fill(std::begin(coeffs[I]) + temp2.size(), std::end(coeffs[I]), 0.);
       compile_for<I+1>(coeffecient_matrix_of_p_to_dnp, coeffs);
     }
   }

@@ -1,9 +1,10 @@
+#include <array>
 #include <iostream>
 
-// #include "bezier_curve.hpp"
+#include "bezier_curve.hpp"
 #include "cubic_hermite_spline.hpp"
-// #include "catmull_rom_spline.hpp"
-// #include "curve_conversion.hpp"
+#include "catmull_rom_spline.hpp"
+#include "curve_conversion.hpp"
 #include "hermite_splines.hpp"
 #include "polynomials.hpp"
 #include "utils.hpp"
@@ -92,7 +93,7 @@ int main () {
   constexpr size_t degree = 5;
   constexpr size_t dimensions = 2;
   constexpr size_t n_points = 10;
-  std::array<Point<dimensions>, degree+1> p = {
+  constexpr std::array<Point<dimensions>, degree+1> p = {
     Point<dimensions>{0., 0.},
     Point<dimensions>{4., 1.},
     Point<dimensions>{0., 1.},
@@ -101,13 +102,12 @@ int main () {
     Point<dimensions>{0., 1.},
   };
 
-
   // auto chs = CubicHermiteSpline<n_points, dimensions>(p);
   // std::cout << "Cubic Hermite Spline" << '\n';
   // chs.print();
   // std::cout << '\n';
 
-  auto hs = HermiteSplines<degree, n_points, dimensions>(p);
+  const auto hs = HermiteSplines<degree, n_points, dimensions>(p);
   std::cout << "Hermite Spline" << '\n';
   hs.print();
   std::cout << '\n';

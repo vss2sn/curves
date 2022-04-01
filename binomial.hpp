@@ -59,18 +59,6 @@ std::array<int, 1> pascals_triangle<0>() {
   return find_all_binomial_coefficients<0>();
 }
 
-template<int start, int end>
-void compile_time_for() {
-  if constexpr (start < end) {
-    const auto ans = find_all_binomial_coefficients<start>();
-    for (const auto& ele : ans) {
-      std::cout << ele << ' ';
-    }
-    std::cout << '\n';
-    compile_time_for<start+1, end>();
-  }
-}
-
 template<size_t N>
 struct BinomialParamterValues {
 public:
@@ -88,13 +76,3 @@ public:
 };
 
 #endif  // BINOMAIAL_HPP
-
-// int main() {
-//   constexpr int N = 5;
-//   // compile_time_for<0, N+1>();
-//   for (const auto& ele : pascals_triangle<N>()) {
-//     std::cout << ele << ' ';
-//   }
-//   std::cout << '\n';
-//   return 0;
-// }

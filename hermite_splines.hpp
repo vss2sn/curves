@@ -56,6 +56,7 @@ private:
     auto coeffecient_matrix_of_p_to_dnp = get_coefficients_of_poly_and_all_derivatives(poly); // dnp = (d)^n p
     std::array<std::array<double, degree+1>, degree+1> coeffs;
     compile_for<0>(coeffecient_matrix_of_p_to_dnp, coeffs);
+    // print(coeffs);
     coefficients_of_basis_curves = inverse_using_LU_decomp(coeffs);
   }
 

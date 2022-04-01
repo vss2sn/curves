@@ -1,6 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 #include <algorithm>
+#include <cmath>
 #include <numeric>
 #include <array>
 #include <iostream>
@@ -8,7 +9,7 @@
 template<size_t N>
 using Point = std::array<double, N>;
 
-emplate<size_t N, size_t M>
+template<size_t N, size_t M>
 void print(std::array<std::array<double, N>, M>& a){
   for (const auto& p : a) {
     std::cout << "( ";
@@ -33,7 +34,7 @@ std::array<std::array<double, N>, N> inverse_using_LU_decomp(std::array<std::arr
   for (int i = 0; i < N - 1; i++){
     auto max_idx = i;
     for (int k  = i+1; k < N; k++) {
-      if (abs(mat[k][i]) > abs(mat[max_idx][i])) {
+      if (std::abs(mat[k][i]) > std::abs(mat[max_idx][i])) {
         max_idx = k;
       }
     }

@@ -9,10 +9,10 @@ class HermiteSplines {
 public:
   explicit HermiteSplines(const std::array<Point<dimensions>, degree + 1> & p) : p(p) {
     calculate_coefficients();
-    const double delta_u = 1./n_points;
+    const double delta_u = 1./(n_points - 1);
     double u = 0;
     std::array<double, degree+1> powers_of_u;
-    for (int i = 0; i <= n_points; i++) {
+    for (int i = 0; i <= (n_points - 1); i++) {
       powers_of_u[degree] = 1;
       for (int i = degree-1; i >=0; i--) {
         powers_of_u[i] = powers_of_u[i+1] * u;
@@ -44,9 +44,9 @@ public:
 
 private:
   std::array<Point<dimensions>, degree + 1> p;
-  std::array<std::array<double, degree+1>, n_points + 1> coefficients;
+  std::array<std::array<double, degree+1>, n_points> coefficients;
   std::array<std::array<double, degree+1>, degree+1> coefficients_of_basis_curves;
-  std::array<Point<dimensions>, n_points + 1> points;
+  std::array<Point<dimensions>, n_points> points;
 
   void calculate_coefficients() {
     std::array<double, degree+1> coeffs_for_ploy;

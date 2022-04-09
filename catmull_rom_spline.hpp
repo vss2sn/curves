@@ -4,16 +4,16 @@
 #include <array>
 
 // Note: a catmull-rum spline iss basically
-// a set of hermite splines connecting sequental points,
-// using tao to calculate the slopes at each ot the intermediate points
+// a set of cubic hermite splines connecting sequental points,
+// using tao to calculate the slopes at each of the intermediate points
 
 // n_points here is n_points per segment not total number of points
 template<size_t N, size_t n_points, size_t dimensions>
 class CatmullRomSpline {
 public:
   explicit CatmullRomSpline(const std::array<Point<dimensions>, N>& p, const double tao) : p(p), tao(tao) {
-    const double interval = (1.)/n_points;
-    std::array<std::array<double, 4>,  n_points+1> coefficients;
+    const double interval = (1.)/(n_points - 1);
+    std::array<std::array<double, 4>, n_points> coefficients;
     const std::array<std::array<double,4>, 4> tao_matrix {
       std::array<double,4>{0., 1., 0., 0.},
       std::array<double,4>{-tao, 0., tao, 0.},
@@ -21,7 +21,7 @@ public:
       std::array<double,4>{-tao, 2.-tao, tao-2., tao}
     };
     double u = 0;
-    for (int i = 0; i < n_points + 1; i++) {
+    for (int i = 0; i < n_points; i++) {
       const std::array<double, 4> u_matrix {1, u, u*u, u*u*u};
       for (int j = 0; j < 4; j++) {
         coefficients[i][j] = 0;
@@ -33,18 +33,18 @@ public:
     }
 
     for (int i = 0; i <= N-4; i++) {
-      for (int j = 0; j < n_points + 1; j++) {
+      for (int j = 0; j < n_points; j++) {
         for (int m = 0; m < dimensions; m++) {
-          points[(n_points + 1) * i+j][m] = 0;
+          points[(n_points) * i+j][m] = 0;
           for (int k = 0; k < 4; k++) {
-            points[(n_points + 1) * i+j][m] += coefficients[j][k] * p[i+k][m];
+            points[(n_points) * i+j][m] += coefficients[j][k] * p[i+k][m];
           }
         }
       }
     }
   }
 
-  void print() {
+  void print() const {
     for (const auto& p : points) {
       for (int j = 0; j < dimensions; j++) {
         std::cout << p[j] << ", ";
@@ -55,7 +55,7 @@ public:
 
 private:
   std::array<Point<dimensions>, N> p;
-  std::array<Point<dimensions>, (N-3)*(n_points+1)> points;
+  std::array<Point<dimensions>, (N-3)*(n_points)> points;
   double tao;
 };
 

@@ -36,7 +36,7 @@
 // }
 
 // int main() {
-//   constexpr int n_points = 100;
+//   constexpr int n_points = 5;
 //   constexpr int dimensions = 2;
 //   std::array<Point<dimensions>, 4> weights = {
 //     Point<dimensions>{110,150},//0},
@@ -62,7 +62,7 @@
 //   b_returned.print();
 //   std::cout << '\n';
 //
-//   return 0
+//   return 0;
 // }
 
 // int main() {
@@ -90,7 +90,7 @@
 // }
 
 int main () {
-  constexpr size_t degree = 5;
+  constexpr size_t degree = 3;
   constexpr size_t dimensions = 2;
   constexpr size_t n_points = 10;
   constexpr std::array<Point<dimensions>, degree+1> p = {
@@ -98,14 +98,14 @@ int main () {
     Point<dimensions>{4., 1.},
     Point<dimensions>{0., 1.},
     Point<dimensions>{0., 1.},
-    Point<dimensions>{0., 1.},
-    Point<dimensions>{0., 1.},
+    // Point<dimensions>{0., 1.},
+    // Point<dimensions>{0., 1.},
   };
 
-  // auto chs = CubicHermiteSpline<n_points, dimensions>(p);
-  // std::cout << "Cubic Hermite Spline" << '\n';
-  // chs.print();
-  // std::cout << '\n';
+  const auto chs = CubicHermiteSpline<n_points, dimensions>(p);
+  std::cout << "Cubic Hermite Spline" << '\n';
+  chs.print();
+  std::cout << '\n';
 
   const auto hs = HermiteSplines<degree, n_points, dimensions>(p);
   std::cout << "Hermite Spline" << '\n';

@@ -12,10 +12,10 @@ using Point = std::array<double, N>;
 template<size_t n_points, size_t dimensions>
 class CubicHermiteSpline {
 public:
-  explicit CubicHermiteSpline(std::array<Point<dimensions>, 4>& p) noexcept : p(p) {
-    const double delta_u = 1./n_points;
+  explicit CubicHermiteSpline(const std::array<Point<dimensions>, 4>& p) noexcept : p(p) {
+    const double delta_u = 1./(n_points - 1);
     double u = 0;
-    for (int i = 0; i <= n_points; i++) {
+    for (int i = 0; i <= n_points - 1; i++) {
       const auto u2 = u * u;
       const auto u3 = u2 * u;
       coefficients[i][0] = 2 * u3 - 3 * u2 + 1;
@@ -32,7 +32,7 @@ public:
     }
   }
 
-  void print() {
+  void print() const {
     for (const auto& p : points) {
       for (int j = 0; j < dimensions; j++) {
         std::cout << p[j] << ", ";
@@ -41,8 +41,8 @@ public:
     }
   }
 private:
-  std::array<std::array<double, 4>, n_points + 1> coefficients;
-  std::array<Point<dimensions>, n_points + 1> points;
+  std::array<std::array<double, 4>, n_points> coefficients;
+  std::array<Point<dimensions>, n_points> points;
   std::array<Point<dimensions>, 4> p;
 };
 

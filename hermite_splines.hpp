@@ -49,6 +49,15 @@ private:
   std::array<Point<dimensions>, n_points> points;
 
   void calculate_coefficients() {
+    // Explanation:
+    // Given a polynomial Cn * x^(n) + Cn-1 * x^(n-1) + ... + C0
+    // Need to find the coeffs Cn, Cn-1, ..., C0
+    // The derivate of the polynomial are n * Cn * x^(n-1) + (n-1) * Cn-1 * x^(n-2) + ... + C1
+    // The compile time for sustitutes the values of the variable at the start and end points of
+    // for these polynomials starting with degree n to degree n/2 and then sthe start point at degree n/2-1 if
+    // n is odd. Note that right now the  first 2 rows of the coeffecient_matrix_of_p_to_dnp would be [[Cn, Cn-1, ..., C0], [0, n * Cn, (n-1) * Cn-1, ..., C1], ...]
+    // The compile for loop converts it to [[Cn, Cn-1, ..., C0], [n * Cn, (n-1) * Cn-1, ..., C1, 0], ...]
+    // Which can then be used in AX=b for to calculate the coefficients. Here X is the column matrix [Cn, C-1, ... C0]
     std::array<double, degree+1> coeffs_for_ploy;
     std::fill(coeffs_for_ploy.begin(), coeffs_for_ploy.end(), 1);
     const Polynomial<degree> poly(coeffs_for_ploy);
@@ -67,16 +76,16 @@ private:
     if constexpr (degree < I) {
       return;
     } else {
-      std::array<double, degree-I/2 + 1> temp;
+      std::array<double, degree-I/2 + 1> coeffs_at_row_I_by_two;
       std::copy(
         std::begin(coeffecient_matrix_of_p_to_dnp[I/2]) + I/2,
         std::end(coeffecient_matrix_of_p_to_dnp[I/2]),
-        std::begin(temp)
+        std::begin(coeffs_at_row_I_by_two)
       );
-      const auto poly_at_i = Polynomial<degree - I/2>(temp);
-      const auto temp2 = poly_at_i.get_component_value(double(I%2));
-      std::copy(std::begin(temp2), std::end(temp2), std::begin(coeffs[I]));
-      std::fill(std::begin(coeffs[I]) + temp2.size(), std::end(coeffs[I]), 0.);
+      const auto poly_at_i = Polynomial<degree - I/2>(coeffs_at_row_I_by_two);
+      const auto components_at_row_I_by_two = poly_at_i.get_component_value(double(I%2));
+      std::copy(std::begin(components_at_row_I_by_two), std::end(components_at_row_I_by_two), std::begin(coeffs[I]));
+      std::fill(std::begin(coeffs[I]) + components_at_row_I_by_two.size(), std::end(coeffs[I]), 0.);
       compile_for<I+1>(coeffecient_matrix_of_p_to_dnp, coeffs);
     }
   }

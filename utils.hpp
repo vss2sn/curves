@@ -10,13 +10,21 @@ template<size_t N>
 using Point = std::array<double, N>;
 
 template<size_t N, size_t M>
-void print(std::array<std::array<double, N>, M>& a){
+void debug_print(const std::array<std::array<double, N>, M>& a){
   for (const auto& p : a) {
     std::cout << "( ";
     for (const auto ele : p) {
       std::cout << ele << ',';
     }
     std::cout << ")\n";
+  }
+  std::cout << '\n';
+}
+
+template<size_t N>
+void debug_print(const std::array<double, N>& a){
+  for (const auto ele : a) {
+    std::cout << ele << ',';
   }
   std::cout << '\n';
 }

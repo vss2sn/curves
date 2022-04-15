@@ -1,5 +1,7 @@
-#include <iostream>
+#ifndef HERMITE_SPLINES_HPP
+#define HERMITE_SPLINES_HPP
 
+#include <iostream>
 
 #include "polynomials.hpp"
 #include "utils.hpp"
@@ -90,3 +92,4 @@ private:
     }
   }
 };
+#endif // HERMITE_SPLINES_HPP

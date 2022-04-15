@@ -9,8 +9,8 @@
 template<size_t N>
 using Point = std::array<double, N>;
 
-template<size_t N, size_t M>
-void debug_print(const std::array<std::array<double, N>, M>& a){
+template<typename T, size_t N, size_t M>
+void debug_print(const std::array<std::array<T, N>, M>& a){
   for (const auto& p : a) {
     std::cout << "( ";
     for (const auto ele : p) {
@@ -21,8 +21,8 @@ void debug_print(const std::array<std::array<double, N>, M>& a){
   std::cout << '\n';
 }
 
-template<size_t N>
-void debug_print(const std::array<double, N>& a){
+template<typename T, size_t N>
+void debug_print(const std::array<T, N>& a){
   for (const auto ele : a) {
     std::cout << ele << ',';
   }
@@ -92,6 +92,28 @@ std::array<std::array<double, N>, N> inverse_using_LU_decomp(std::array<std::arr
     }
   }
   return inversed_data;
+}
+
+template<typename T, size_t A, size_t B, size_t C>
+std::array<std::array<T, C>, A> multiply_two_matrices(
+  const std::array<std::array<T, B>, A>& m1,
+  const std::array<std::array<T, C>, B>& m2)
+{
+  std::array<std::array<T, C>, A> ans;
+  for(auto& row : ans) {
+    for (auto& ele : row) {
+      ele = 0;
+    }
+  }
+
+  for (int i = 0; i < A; i++) {
+    for (int j = 0; j < B; j++) {
+      for (int k = 0; k <C; k++) {
+        ans[i][k] +=  m1[i][j] * m2[j][k];
+      }
+    }
+  }
+  return ans;
 }
 
 #endif  // UTILS_H

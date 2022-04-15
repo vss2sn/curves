@@ -10,17 +10,20 @@
 #include "utils.hpp"
 
 
-// int main() {
-//   std::array<Point<3>, 4> weights = {
-//     Point<3>{110,150, 0},
-//     Point<3>{25,190,1},
-//     Point<3>{210,250,2},
-//     Point<3>{210, 30,3}
-//   };
-//   BezierCurve<3, 10, 3> b (weights);
-//   b.print();
-//   return 0;
-// }
+int main() {
+  std::array<Point<3>, 4> weights = {
+    Point<3>{110,150, 0},
+    Point<3>{25,190,1},
+    Point<3>{210,250,2},
+    Point<3>{210, 30,3}
+  };
+  BezierCurve<3, 10, 3> b (weights);
+  b.print();
+  std::cout << '\n';
+  auto hs = B2H(b);
+  hs.print();
+  return 0;
+}
 
 // int main() {
 //   std::array<Point<2>, 4> points = {
@@ -88,28 +91,43 @@
 //
 //   return 0;
 // }
+//
+// int main () {
+//   constexpr size_t degree = 3;
+//   constexpr size_t dimensions = 2;
+//   constexpr size_t n_points = 10;
+//   constexpr std::array<Point<dimensions>, degree+1> p = {
+//     Point<dimensions>{0., 0.},
+//     Point<dimensions>{4., 1.},
+//     Point<dimensions>{0., 1.},
+//     Point<dimensions>{0., 1.},
+//     // Point<dimensions>{0., 1.},
+//     // Point<dimensions>{0., 1.},
+//   };
+//
+//   const auto chs = CubicHermiteSpline<n_points, dimensions>(p);
+//   std::cout << "Cubic Hermite Spline" << '\n';
+//   chs.print();
+//   std::cout << '\n';
+//
+//   const auto hs = HermiteSplines<degree, n_points, dimensions>(p);
+//   std::cout << "Hermite Spline" << '\n';
+//   hs.print();
+//   std::cout << '\n';
+//   return 0;
+// }
 
-int main () {
-  constexpr size_t degree = 3;
-  constexpr size_t dimensions = 2;
-  constexpr size_t n_points = 10;
-  constexpr std::array<Point<dimensions>, degree+1> p = {
-    Point<dimensions>{0., 0.},
-    Point<dimensions>{4., 1.},
-    Point<dimensions>{0., 1.},
-    Point<dimensions>{0., 1.},
-    // Point<dimensions>{0., 1.},
-    // Point<dimensions>{0., 1.},
-  };
-
-  const auto chs = CubicHermiteSpline<n_points, dimensions>(p);
-  std::cout << "Cubic Hermite Spline" << '\n';
-  chs.print();
-  std::cout << '\n';
-
-  const auto hs = HermiteSplines<degree, n_points, dimensions>(p);
-  std::cout << "Hermite Spline" << '\n';
-  hs.print();
-  std::cout << '\n';
-  return 0;
-}
+// int main () {
+//   std::array<std::array<double, 4>, 1> m1 = {
+//     {1,2,3,4}
+//   };
+//
+//   std::array<std::array<double, 2>, 4> m2 = {
+//     std::array<double, 2>{1,2},
+//     std::array<double, 2>{1,2},
+//     std::array<double, 2>{1,2},
+//     std::array<double, 2>{1,2}
+//   };
+//
+//   debug_print(multiply_two_matrices(m1, m2));
+// }

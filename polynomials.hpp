@@ -92,8 +92,8 @@ template<size_t degree>
 std::array<std::array<double, degree+1>, degree+1> get_coefficients_of_poly_and_all_derivatives(const Polynomial<degree>& poly) {
   std::array<std::array<double, degree+1>, degree+1> ans;
   ans[0] = poly.get_coefficients();
-  auto poly_d = poly.get_derivative();
-  auto lower_order_coeffs = get_coefficients_of_poly_and_all_derivatives(poly_d);
+  const auto poly_d = poly.get_derivative();
+  const auto lower_order_coeffs = get_coefficients_of_poly_and_all_derivatives(poly_d);
   for (int row = 1; row < degree+1; row++) {
     ans[row][0] = 0;
   }

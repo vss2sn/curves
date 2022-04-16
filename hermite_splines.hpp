@@ -16,7 +16,7 @@ public:
     std::array<double, degree+1> powers_of_u;
     for (int i = 0; i <= (n_points - 1); i++) {
       powers_of_u[degree] = 1;
-      for (int i = degree-1; i >=0; i--) {
+      for (int i = degree-1; i >= 0; i--) {
         powers_of_u[i] = powers_of_u[i+1] * u;
       }
       for (int m = 0; m < degree+1; m++) {
@@ -33,7 +33,6 @@ public:
       }
       u += delta_u;
     }
-    // std::cout << __LINE__ << '\n';
   }
 
   void print() const {
@@ -48,6 +47,7 @@ public:
   std::array<Point<dimensions>, degree + 1> get_p() const {
     return p;
   }
+
 private:
   std::array<Point<dimensions>, degree + 1> p;
   std::array<std::array<double, degree+1>, n_points> coefficients;

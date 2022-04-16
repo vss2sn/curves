@@ -1,8 +1,6 @@
 #ifndef BEZIER_CURVE_HPP
 #define BEZIER_CURVE_HPP
 
-#include <cassert>
-
 #include "binomial.hpp"
 #include "utils.hpp"
 
@@ -10,7 +8,7 @@ template <size_t degree, size_t n_points, size_t dimensions>
 class BezierCurve {
 public:
   explicit BezierCurve(const std::array<Point<dimensions>, degree +1>& weights) noexcept : weights(weights) {
-    std::array<int, degree + 1> binomial_coeffs = find_all_binomial_coefficients<degree>();
+    const std::array<int, degree + 1> binomial_coeffs = find_all_binomial_coefficients<degree>();
     for (int i = 0; i < n_points; i++) {
       BinomialParamterValues<degree> p( i * 1./(n_points - 1));
       for (int j = 0; j < degree + 1; j++) {
@@ -34,7 +32,7 @@ public:
     }
   }
 
-  BezierCurve<degree-1, n_points, dimensions> get_derivative() {
+  BezierCurve<degree-1, n_points, dimensions> get_derivative() const {
     if constexpr (degree > 0) {
       std::array<double, degree> derivative_weights;
       for (int i = 0; i < degree; i++) {
@@ -49,7 +47,7 @@ public:
   template<size_t N>
   static std::array<std::array<double, degree+1>, degree+1-N> get_nth_derivative_to_current_weights_relation() {
     if constexpr (N >= 1) {
-      assert(degree+1-N+1 > 0);
+      // assert(degree+1-N+1 > 0);  // Debug assert
       std::array<std::array<double, degree+1-N+1>, degree+1-N> relation_matrix;
       for (int row = 0; row <degree+1-N; row++) {
         for (int col = 0; col < degree+1-N+1; col++) {

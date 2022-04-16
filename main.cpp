@@ -11,16 +11,27 @@
 
 
 int main() {
-  std::array<Point<3>, 4> weights = {
-    Point<3>{110,150, 0},
-    Point<3>{25,190,1},
-    Point<3>{210,250,2},
-    Point<3>{210, 30,3}
+  constexpr size_t degree = 5;
+  std::array<Point<2>, degree+1> weights = {
+    Point<2>{210,30},
+    Point<2>{210,250},
+    Point<2>{25,190},
+    Point<2>{70,120},
+    Point<2>{110,150},
+    Point<2>{220,220},
   };
-  BezierCurve<3, 10, 3> b (weights);
+  BezierCurve<degree, 10, 2> b (weights);
   b.print();
   std::cout << '\n';
-  auto hs = B2H(b);
+  HermiteSplines<degree, 10, 2> hs = B2H(b);
+  // std::array<Point<2>, 5> p = {
+  //   Point<2>{210,30},
+  //   Point<2>{210,250},
+  //   Point<2>{0, 880},
+  //   Point<2>{440,0},
+  //   Point<2>{-555,-840}
+  // };
+  // auto hs = HermiteSplines<4, 10, 2>(p);
   hs.print();
   return 0;
 }

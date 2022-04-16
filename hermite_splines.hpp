@@ -14,6 +14,7 @@ public:
     const double delta_u = 1./(n_points - 1);
     double u = 0;
     std::array<double, degree+1> powers_of_u;
+    // std::cout << __LINE__ << '\n';
     for (int i = 0; i <= (n_points - 1); i++) {
       powers_of_u[degree] = 1;
       for (int i = degree-1; i >=0; i--) {
@@ -33,6 +34,7 @@ public:
       }
       u += delta_u;
     }
+    // std::cout << __LINE__ << '\n';
   }
 
   void print() const {

@@ -53,25 +53,18 @@ std::array<Point<dimensions>, 4> convertBezierPointsToHermitePoints(const std::a
 }
 
 template<size_t degree, size_t n_points, size_t dimensions, size_t N>
-void create_coversion_matrix(
-  std::array<std::array<int, degree+1>, degree+1>& conversion_matrix,
-  const BezierCurve<degree, n_points, dimensions>& b
-)
-{
- // std::cout << N << '\n';
- if constexpr (N < (degree+1)/2 && N >= 0) {
-    std::array<std::array<int, degree+1>, degree+1-N> temp = b.template get_nth_derivative_to_current_weights_relation<N>();
-    // debug_print(temp);
+void create_Bezier_to_Hermite_conversion_matrix_impl(std::array<std::array<double, degree+1>, degree+1>& conversion_matrix) {
+  // std::cout << N << '\n';
+  if constexpr (N < (degree+1)/2 && N >= 0) {
+    // std::cout << N << '\n';
+    const auto temp = BezierCurve<degree, n_points, dimensions>::template get_nth_derivative_to_current_weights_relation<N>();
     conversion_matrix[2*N] = temp[0];
     conversion_matrix[2*N+1] = temp[temp.size()-1];
     if (N != 0) {
       size_t multiplicative_factor = 1;
       for (int i = degree; i > degree-N && degree-N > 0; i--) {
-        // std::cout << i << '\n';
         multiplicative_factor *= i;
       }
-
-      // std::cout << "multiplicative_factor: " << multiplicative_factor << '\n';
       for (auto& ele : conversion_matrix[2*N]) {
         ele *= multiplicative_factor;
       }
@@ -79,49 +72,69 @@ void create_coversion_matrix(
         ele *= multiplicative_factor;
       }
     }
-    create_coversion_matrix<degree, n_points, dimensions, N+1>(conversion_matrix, b);
-  } else if constexpr (N%2 == 0 && N == (degree+1)/2) {
-    std::array<std::array<int, degree+1>, degree+1-N> temp = b.template get_nth_derivative_to_current_weights_relation<N>();
-    // debug_print(temp);
+    create_Bezier_to_Hermite_conversion_matrix_impl<degree, n_points, dimensions, N+1>(conversion_matrix);
+  } else if constexpr (degree%2 == 0 && N == degree/2) {
+    // std::cout << N << '\n';
+    const auto temp = BezierCurve<degree, n_points, dimensions>::template get_nth_derivative_to_current_weights_relation<N>();
     conversion_matrix[2 * N] = temp[0];
-    if (N != 0) {
+    // if (N != 0) {
       size_t multiplicative_factor = 1;
       for (int i = degree; i > degree-N && degree-N > 0; i--) {
         multiplicative_factor *= i;
       }
-      // std::cout << "multiplicative_factor: " << multiplicative_factor << '\n';
       for (auto& ele : conversion_matrix[2*N]) {
         ele *= multiplicative_factor;
       }
-    }
-  } else {
-    return;
+    // }
   }
+  return;
 }
 
 template<size_t degree, size_t n_points, size_t dimensions>
-HermiteSplines<degree, n_points, dimensions> B2H(BezierCurve<degree, n_points, dimensions>& b) {
-  auto weights = b.get_weights();
-  std::array<std::array<int, degree+1>, degree+1> conversion_matrix;
+std::array<std::array<double, degree+1>, degree+1> create_Bezier_to_Hermite_conversion_matrix() {
+  std::array<std::array<double, degree+1>, degree+1> conversion_matrix;
   for(auto& row : conversion_matrix) {
     for (auto& ele : row) {
       ele = 0;
     }
   }
-  constexpr size_t N = 0;
-  create_coversion_matrix<degree, n_points, dimensions, N>(conversion_matrix, b);
+  create_Bezier_to_Hermite_conversion_matrix_impl<degree, n_points, dimensions, 0>(conversion_matrix);
   // debug_print(conversion_matrix);
+  return conversion_matrix;
+}
+
+template<size_t degree, size_t n_points, size_t dimensions>
+HermiteSplines<degree, n_points, dimensions> B2H(BezierCurve<degree, n_points, dimensions>& b) {
+  const auto weights = b.get_weights();
+  const auto conversion_matrix = create_Bezier_to_Hermite_conversion_matrix<degree, n_points, dimensions>();
   std::array<Point<dimensions>, degree+1> p;
   for (int row = 0; row < conversion_matrix.size(); row++) {
     for (int dimension = 0; dimension < dimensions; dimension++) {
       p[row][dimension] = 0;
       for (int col = 0; col < conversion_matrix.size(); col++) {
-        p[row][dimension] += static_cast<double>(conversion_matrix[row][col]) * weights[col][dimension];
+        p[row][dimension] += conversion_matrix[row][col] * weights[col][dimension];
       }
     }
   }
-  // debug_print(p);
-  auto hs = HermiteSplines<degree, n_points, dimensions>(p);
-  return hs;
+  return HermiteSplines<degree, n_points, dimensions>(p);
 }
+
+template<size_t degree, size_t n_points, size_t dimensions>
+BezierCurve<degree, n_points, dimensions> H2B(HermiteSplines<degree, n_points, dimensions>& hs) {
+  const auto p = hs.get_p();
+  const auto conversion_matrix = create_Bezier_to_Hermite_conversion_matrix<degree, n_points, dimensions>();
+  const auto inverted_conversion_matrix = inverse_using_LU_decomp<degree+1>(conversion_matrix);
+  std::array<Point<dimensions>, degree+1> weights;
+  for (int row = 0; row < inverted_conversion_matrix.size(); row++) {
+    for (int dimension = 0; dimension < dimensions; dimension++) {
+      weights[row][dimension] = 0;
+      for (int col = 0; col < inverted_conversion_matrix.size(); col++) {
+        weights[row][dimension] += inverted_conversion_matrix[row][col] * p[col][dimension];
+      }
+    }
+  }
+  return BezierCurve<degree, n_points, dimensions>(weights);
+}
+
+
 #endif  // CURVE_CONVERSION_HPP

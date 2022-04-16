@@ -47,10 +47,10 @@ public:
   }
 
   template<size_t N>
-  std::array<std::array<int, degree+1>, degree+1-N> get_nth_derivative_to_current_weights_relation() const {
+  static std::array<std::array<double, degree+1>, degree+1-N> get_nth_derivative_to_current_weights_relation() {
     if constexpr (N >= 1) {
       assert(degree+1-N+1 > 0);
-      std::array<std::array<int, degree+1-N+1>, degree+1-N> relation_matrix;
+      std::array<std::array<double, degree+1-N+1>, degree+1-N> relation_matrix;
       for (int row = 0; row <degree+1-N; row++) {
         for (int col = 0; col < degree+1-N+1; col++) {
           if (row == col) {
@@ -65,7 +65,7 @@ public:
       }
       return multiply_two_matrices(relation_matrix, get_nth_derivative_to_current_weights_relation<N-1>());
     } else {
-      std::array<std::array<int, degree+1>, degree+1> relation_matrix;
+      std::array<std::array<double, degree+1>, degree+1> relation_matrix;
       for (int row = 0; row <degree+1; row++) {
         for (int col = 0; col < degree+1; col++) {
           if (row  == col) {

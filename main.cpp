@@ -2,38 +2,29 @@
 #include <iostream>
 
 #include "bezier_curve.hpp"
-#include "cubic_hermite_spline.hpp"
+#include "b_spline_curve.hpp"
 #include "catmull_rom_spline.hpp"
+#include "cubic_hermite_spline.hpp"
 #include "curve_conversion.hpp"
 #include "hermite_splines.hpp"
 #include "polynomials.hpp"
 #include "utils.hpp"
 
-
-int main() {
-  constexpr size_t degree = 7;
-  std::array<Point<2>, degree+1> weights = {
-    Point<2>{210,30},
-    Point<2>{210,250},
-    Point<2>{25,190},
-    Point<2>{20,120},
-    Point<2>{25,140},
-    Point<2>{220,220},
-    Point<2>{250,260},
-    Point<2>{300,260},
-  };
-  BezierCurve<degree, 10, 2> b (weights);
-  b.print();
-  std::cout << '\n';
-
-  HermiteSplines<degree, 10, 2> hs = B2H(b);
-  hs.print();
-  std::cout << '\n';
-
-  BezierCurve<degree, 10, 2> b2 = H2B(hs);
-  b2.print();
-  return 0;
-}
+// int main() {
+//   constexpr size_t degree = 3;
+//   std::array<Point<2>, degree+1> weights = {
+//     Point<2>{-1.0,  0.0},
+//     Point<2>{-0.5,  0.5},
+//     Point<2>{ 0.5, -0.5},
+//     Point<2>{ 1.0,  0.0},
+//   };
+//   BezierCurve<degree, 100, 2> b (weights);
+//   b.print();
+//   std::cout << '\n';
+//
+//
+//   return 0;
+// }
 
 // int main() {
 //   std::array<Point<2>, 4> points = {
@@ -141,3 +132,36 @@ int main() {
 //
 //   debug_print(multiply_two_matrices(m1, m2));
 // }
+
+int main() {
+  constexpr size_t n_control_points = 4;
+  constexpr size_t degree = 3;
+  constexpr size_t dimensions = 2;
+  constexpr size_t n_points = 100;
+
+  std::array<std::array<double, dimensions>, n_control_points> control_points = {
+    Point<dimensions>{-1.0,  0.0},
+    Point<dimensions>{-0.5,  0.5},
+    Point<dimensions>{ 0.5, -0.5},
+    Point<dimensions>{ 1.0,  0.0},
+  };
+
+  // B-splines with clamped knot vectors pass through
+  // the two end control points.
+  // A clamped knot vector must have `degree + 1` equal knots
+  // at both its beginning and end.
+  // This is done to ensure that the bspline collapses into a bezier curve
+  // and a comparison and sanity check for the code can be run
+  std::array<int, n_control_points+degree+1> knots = {0,0,0,0,3,3,3,3};
+  std::array<int, n_control_points> weights;
+  std::fill(std::begin(weights), std::end(weights), 1);
+  BSplineCurve<degree, n_control_points, n_points, dimensions> bspline(control_points, knots, weights);
+  bspline.print();
+
+  // assert (degree + 1) == n_control_points;
+  BezierCurve<degree, n_points, dimensions> bezier (control_points);
+  bezier.print();
+
+  std::cout << '\n';
+  return 0;
+}

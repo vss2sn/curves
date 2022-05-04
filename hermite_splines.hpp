@@ -35,7 +35,7 @@ public:
     }
   }
 
-  void print() const {
+  constexpr void print() const {
     for (const auto& p : points) {
       for (int j = 0; j < dimensions; j++) {
         std::cout << p[j] << ", ";
@@ -44,12 +44,12 @@ public:
     }
   }
 
-  std::array<Point<dimensions>, degree + 1> get_p() const {
+  constexpr std::array<Point<dimensions>, degree + 1> get_p() const {
     return p;
   }
 
 private:
-  std::array<Point<dimensions>, degree + 1> p;
+  const std::array<Point<dimensions>, degree + 1> p;
   std::array<std::array<double, degree+1>, n_points> coefficients;
   std::array<std::array<double, degree+1>, degree+1> coefficients_of_basis_curves;
   std::array<Point<dimensions>, n_points> points;
@@ -96,4 +96,5 @@ private:
     }
   }
 };
+
 #endif // HERMITE_SPLINES_HPP

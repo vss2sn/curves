@@ -276,6 +276,15 @@
 //     }
 //
 // }
+//
+// int main() {
+//   constexpr auto hs_constexpr = f();
+//   hs_constexpr.print();
+//   std::cout << '\n';
+//   const auto hs = f();
+//   hs.print();
+//   return 0;
+// }
 
 constexpr int n_points = 10;
 constexpr int dimensions = 2;
@@ -311,9 +320,7 @@ constexpr CatmullRomSpline<N, n_points, dimensions> f() {
       auto cms = CatmullRomSpline<N, n_points, dimensions>(p, tao);
       return cms;
     }
-
 }
-
 
 int main() {
   constexpr auto cms_constexpr = f();

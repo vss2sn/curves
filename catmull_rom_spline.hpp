@@ -44,7 +44,7 @@ public:
     }
   }
 
-  void print() const {
+  constexpr void print() const {
     for (const auto& p : points) {
       for (int j = 0; j < dimensions; j++) {
         std::cout << p[j] << ", ";

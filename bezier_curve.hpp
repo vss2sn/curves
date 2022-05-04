@@ -26,7 +26,7 @@ public:
     }
   }
 
-  void print() const {
+  constexpr void print() const {
     for (int i = 0; i < n_points; i++) {
       for (int j = 0; j < dimensions; j++) {
         std::cout <<  points[i][j] << ", ";
@@ -35,11 +35,12 @@ public:
     }
   }
 
-  BezierCurve<degree-1, n_points, dimensions> get_derivative() const {
+  constexpr BezierCurve<degree-1, n_points, dimensions> get_derivative() const {
     if constexpr (degree > 0) {
-      std::array<double, degree> derivative_weights;
+      std::array<Point<dimensions>, degree> derivative_weights;
       for (int i = 0; i < degree; i++) {
-        derivative_weights[i] = degree * (weights[i+1] - weights[i]);
+        for (int d = 0; d < dimensions; d++)
+        derivative_weights[i][d] = degree * (weights[i+1][d] - weights[i][d]);
       }
       return BezierCurve<degree-1, n_points, dimensions>(derivative_weights);
     } else {
@@ -48,7 +49,7 @@ public:
   }
 
   template<size_t N>
-  static std::array<std::array<double, degree+1>, degree+1-N> get_nth_derivative_to_current_weights_relation() {
+  constexpr static std::array<std::array<double, degree+1>, degree+1-N> get_nth_derivative_to_current_weights_relation() {
     if constexpr (N >= 1) {
       // assert(degree+1-N+1 > 0);  // Debug assert
       std::array<std::array<double, degree+1-N+1>, degree+1-N> relation_matrix;
@@ -80,7 +81,7 @@ public:
     }
   }
 
-  std::array<Point<dimensions>, degree + 1> get_weights() const {
+  constexpr std::array<Point<dimensions>, degree + 1> get_weights() const {
     return weights;
   }
 private:

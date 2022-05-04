@@ -50,7 +50,7 @@ public:
     }
   }
 
-  std::array<std::array<double, dimensions>, n_control_points> get_control_points() const {
+  constexpr std::array<std::array<double, dimensions>, n_control_points> get_control_points() const {
     return control_points;
   }
 

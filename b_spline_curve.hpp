@@ -1,3 +1,6 @@
+#ifndef B_SPLINE_CURVE_HPP
+#define B_SPLINE_CURVE_HPP
+
 #include <array>
 #include <iostream>
 
@@ -8,10 +11,10 @@ template<size_t degree, size_t n_control_points, size_t n_points, size_t dimensi
     std::enable_if_t<std::less<size_t>()(degree, n_control_points), bool> = true>
 class BSplineCurve {
 public:
-  explicit BSplineCurve (
+  constexpr explicit BSplineCurve (
     const std::array<std::array<double, dimensions>, n_control_points>& control_points,
-    std::array<int, n_control_points + degree + 1>& knots,
-    std::array<int, n_control_points>& weights
+    const std::array<int, n_control_points + degree + 1>& knots,
+    const std::array<int, n_control_points>& weights
   ) : control_points(control_points), knots(knots), weights(weights) {
 
     const std::array<size_t, 2> domain = {
@@ -38,7 +41,7 @@ public:
     }
   }
 
-  void print() const {
+  constexpr void print() const {
     for (size_t i = 0; i < n_points; i++) {
       for (size_t j = 0; j < dimensions; j++) {
         std::cout <<  points[i][j] << ", ";
@@ -53,23 +56,26 @@ public:
 
 private:
 
-  Point<dimensions> interpolate(const double& t,
+  constexpr Point<dimensions> interpolate(const double& t,
     const std::array<size_t, 2>& domain,
     std::array<Point<dimensions+1>, n_control_points> homogeneous_coordinates
   ) {
 
-    size_t s = domain[0];
-    for (; s < domain[1]; s++) {
-      if(t >= knots[s] && t <= knots[s+1]) {
-        break;
-      }
-    }
+    size_t s = std::distance(
+      std::begin(knots),
+      std::find_if(std::begin(knots), std::end(knots), [&t](const auto& ele) { return t <= ele; })
+    );
+    s = std::max(domain[0], s);
+    s = std::min(domain[1]-1, s);
+
 
     for(size_t l = 1; l <= degree + 1; l++) {
       for(size_t i = s; i > s - degree - 1 + l; i--) {
         const double alpha = (t - knots[i]) / (knots[i + degree + 1 - l] - knots[i]);
         for(size_t j = 0; j < dimensions + 1; j++) {
-          homogeneous_coordinates[i][j] = (1 - alpha) * homogeneous_coordinates[i-1][j] + alpha * homogeneous_coordinates[i][j];
+          if (i < homogeneous_coordinates.size()) {
+            homogeneous_coordinates[i][j] = (1 - alpha) * homogeneous_coordinates[i-1][j] + alpha * homogeneous_coordinates[i][j];
+          }
         }
       }
     }
@@ -89,3 +95,5 @@ private:
   const std::array<int, n_control_points> weights;
   std::array<Point<dimensions>, n_points> points;
 };
+
+#endif  // B_SPLINE_CURVE_HPP

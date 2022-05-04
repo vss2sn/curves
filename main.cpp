@@ -133,35 +133,65 @@
 //   debug_print(multiply_two_matrices(m1, m2));
 // }
 
+// int main() {
+//   constexpr size_t n_control_points = 4;
+//   constexpr size_t degree = 3;
+//   constexpr size_t dimensions = 2;
+//   constexpr size_t n_points = 100;
+//
+//   std::array<std::array<double, dimensions>, n_control_points> control_points = {
+//     Point<dimensions>{-1.0,  0.0},
+//     Point<dimensions>{-0.5,  0.5},
+//     Point<dimensions>{ 0.5, -0.5},
+//     Point<dimensions>{ 1.0,  0.0},
+//   };
+//
+//   // B-splines with clamped knot vectors pass through
+//   // the two end control points.
+//   // A clamped knot vector must have `degree + 1` equal knots
+//   // at both its beginning and end.
+//   // This is done to ensure that the bspline collapses into a bezier curve
+//   // and a comparison and sanity check for the code can be run
+//   std::array<int, n_control_points+degree+1> knots = {0,0,0,0,3,3,3,3};
+//   std::array<int, n_control_points> weights;
+//   std::fill(std::begin(weights), std::end(weights), 1);
+//   BSplineCurve<degree, n_control_points, n_points, dimensions> bspline(control_points, knots, weights);
+//   bspline.print();
+//
+//   // assert (degree + 1) == n_control_points;
+//   BezierCurve<degree, n_points, dimensions> bezier (control_points);
+//   bezier.print();
+//
+//   std::cout << '\n';
+//   return 0;
+// }
+
+
+// To check if compile time evaluation is performed
+constexpr int f() {
+    if (std::is_constant_evaluated()) {
+        constexpr size_t n_control_points = 4;
+        constexpr size_t degree = 3;
+        constexpr size_t dimensions = 2;
+        constexpr size_t n_points = 10;
+
+        constexpr std::array<std::array<double, dimensions>, n_control_points> control_points = {
+            Point<dimensions>{-1.0,  0.0},
+            Point<dimensions>{-0.5,  0.5},
+            Point<dimensions>{ 0.5, -0.5},
+            Point<dimensions>{ 1.0,  0.0},
+        };
+
+        constexpr std::array<int, n_control_points+degree+1> knots = {0,0,0,0,3,3,3,3};
+        constexpr std::array<int, n_control_points> weights = {1,1,1,1};
+        constexpr BSplineCurve<degree, n_control_points, n_points, dimensions> bspline(control_points, knots, weights);
+        return 100;
+    }
+    return 0;
+}
+
 int main() {
-  constexpr size_t n_control_points = 4;
-  constexpr size_t degree = 3;
-  constexpr size_t dimensions = 2;
-  constexpr size_t n_points = 100;
-
-  std::array<std::array<double, dimensions>, n_control_points> control_points = {
-    Point<dimensions>{-1.0,  0.0},
-    Point<dimensions>{-0.5,  0.5},
-    Point<dimensions>{ 0.5, -0.5},
-    Point<dimensions>{ 1.0,  0.0},
-  };
-
-  // B-splines with clamped knot vectors pass through
-  // the two end control points.
-  // A clamped knot vector must have `degree + 1` equal knots
-  // at both its beginning and end.
-  // This is done to ensure that the bspline collapses into a bezier curve
-  // and a comparison and sanity check for the code can be run
-  std::array<int, n_control_points+degree+1> knots = {0,0,0,0,3,3,3,3};
-  std::array<int, n_control_points> weights;
-  std::fill(std::begin(weights), std::end(weights), 1);
-  BSplineCurve<degree, n_control_points, n_points, dimensions> bspline(control_points, knots, weights);
-  bspline.print();
-
-  // assert (degree + 1) == n_control_points;
-  BezierCurve<degree, n_points, dimensions> bezier (control_points);
-  bezier.print();
-
-  std::cout << '\n';
-  return 0;
+    constexpr int i = f();
+    std::cout << i << '\n';
+    return 0;
 }

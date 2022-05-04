@@ -11,7 +11,7 @@
 template<size_t N, size_t n_points, size_t dimensions>
 class CatmullRomSpline {
 public:
-  explicit CatmullRomSpline(const std::array<Point<dimensions>, N>& p, const double tao) : p(p), tao(tao) {
+  constexpr explicit CatmullRomSpline(const std::array<Point<dimensions>, N>& p, const double tao) : p(p), tao(tao) {
     const double interval = (1.)/(n_points - 1);
     std::array<std::array<double, 4>, n_points> coefficients;
     const std::array<std::array<double,4>, 4> tao_matrix {
@@ -54,9 +54,9 @@ public:
   }
 
 private:
-  std::array<Point<dimensions>, N> p;
+  const std::array<Point<dimensions>, N> p;
   std::array<Point<dimensions>, (N-3)*(n_points)> points;
-  double tao;
+  const double tao;
 };
 
 #endif  // CATMULL_ROM_SPLINE_HPP

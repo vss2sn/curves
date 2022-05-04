@@ -247,41 +247,79 @@
 //     return 0;
 // }
 
-constexpr size_t degree = 3;
-constexpr size_t dimensions = 2;
-constexpr size_t n_points = 10;
+// constexpr size_t degree = 3;
+// constexpr size_t dimensions = 2;
+// constexpr size_t n_points = 10;
+//
+// // To check if compile time evaluation is performed
+// constexpr HermiteSplines<degree, n_points, dimensions> f() {
+//     if (std::is_constant_evaluated()) {
+//       constexpr std::array<Point<dimensions>, degree+1> p = {
+//         Point<dimensions>{0., 0.},
+//         Point<dimensions>{4., 1.},
+//         Point<dimensions>{0., 1.},
+//         Point<dimensions>{0., 1.},
+//       };
+//
+//       constexpr auto hs = HermiteSplines<degree, n_points, dimensions>(p);
+//       return hs;
+//     } else {
+//       constexpr std::array<Point<dimensions>, degree+1> p = {
+//         Point<dimensions>{0., 0.},
+//         Point<dimensions>{1., 1.},
+//         Point<dimensions>{0., 1.},
+//         Point<dimensions>{0., 1.},
+//       };
+//
+//       constexpr auto hs = HermiteSplines<degree, n_points, dimensions>(p);
+//       return hs;
+//     }
+//
+// }
 
+constexpr int n_points = 10;
+constexpr int dimensions = 2;
+constexpr int N = 7;
 // To check if compile time evaluation is performed
-constexpr HermiteSplines<degree, n_points, dimensions> f() {
+constexpr CatmullRomSpline<N, n_points, dimensions> f() {
     if (std::is_constant_evaluated()) {
-      constexpr std::array<Point<dimensions>, degree+1> p = {
-        Point<dimensions>{0., 0.},
-        Point<dimensions>{4., 1.},
-        Point<dimensions>{0., 1.},
-        Point<dimensions>{0., 1.},
+      constexpr std::array<Point<dimensions>, N> p = {
+          Point<dimensions>{-4., 1.},
+          Point<dimensions>{-4., 1.},
+          Point<dimensions>{-2., -2.},
+          Point<dimensions>{0, 0},
+          Point<dimensions>{2, -3},
+          Point<dimensions>{3, 1},
+          Point<dimensions>{3, 1},
       };
 
-      constexpr auto hs = HermiteSplines<degree, n_points, dimensions>(p);
-      return hs;
+      constexpr double tao = 1;
+      constexpr auto cms = CatmullRomSpline<N, n_points, dimensions>(p, tao);
+      return cms;
     } else {
-      constexpr std::array<Point<dimensions>, degree+1> p = {
-        Point<dimensions>{0., 0.},
-        Point<dimensions>{1., 1.},
-        Point<dimensions>{0., 1.},
-        Point<dimensions>{0., 1.},
+      std::array<Point<dimensions>, N> p = {
+          Point<dimensions>{-5., 1.},
+          Point<dimensions>{-5., 1.},
+          Point<dimensions>{-2., -2.},
+          Point<dimensions>{0, 0},
+          Point<dimensions>{2, -3},
+          Point<dimensions>{4, 1},
+          Point<dimensions>{4, 1},
       };
 
-      constexpr auto hs = HermiteSplines<degree, n_points, dimensions>(p);
-      return hs;
+      const double tao = 1;
+      auto cms = CatmullRomSpline<N, n_points, dimensions>(p, tao);
+      return cms;
     }
 
 }
 
+
 int main() {
-    constexpr auto hs_constexpr = f();
-    hs_constexpr.print();
-    std::cout << '\n';
-    auto hs = f();
-    hs.print();
-    return 0;
+  constexpr auto cms_constexpr = f();
+  cms_constexpr.print();
+  std::cout << '\n';
+  auto cms = f();
+  cms.print();
+  return 0;
 }

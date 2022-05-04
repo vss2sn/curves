@@ -6,9 +6,9 @@
 template<size_t degree>
 class Polynomial {
 public:
-  explicit Polynomial(const std::array<double, degree+1>& coefficients = {}) : coefficients(coefficients) {}
+  constexpr explicit Polynomial(const std::array<double, degree+1>& coefficients = {}) : coefficients(coefficients) {}
 
-  double get_value(const double x) const {
+  constexpr double get_value(const double x) const {
     double ans = 0;
     double variable = 1;
     for (auto it= coefficients.rbegin(); it != coefficients.rend(); it++) {
@@ -18,7 +18,7 @@ public:
     return ans;
   }
 
-  std::array<double, degree + 1> get_component_value(const double x) const {
+  constexpr std::array<double, degree + 1> get_component_value(const double x) const {
     std::array<double, degree + 1> ans;
     double variable = 1;
     for (int i = degree; i >= 0; i--) {
@@ -28,7 +28,7 @@ public:
     return ans;
   }
 
-  Polynomial<degree - 1> get_derivative () const {
+  constexpr Polynomial<degree - 1> get_derivative () const {
     std::array<double, degree> new_coefficients;
     for (int i = 0; i < degree; i++) {
       new_coefficients[i] = coefficients[i] * (degree - i);
@@ -36,11 +36,11 @@ public:
     return Polynomial<degree - 1>(new_coefficients);
   }
 
-  std::array<double, degree + 1> get_coefficients () const {
+  constexpr std::array<double, degree + 1> get_coefficients () const {
     return coefficients;
   }
 
-  size_t get_degree() const {
+  constexpr size_t get_degree() const {
     return degree;
   }
 
@@ -58,25 +58,25 @@ private:
 template<>
 class Polynomial<0> {
 public:
-  explicit Polynomial(const std::array<double, 1>& coefficients = {0}) : coefficients(coefficients) {}
+  constexpr explicit Polynomial(const std::array<double, 1>& coefficients = {0}) : coefficients(coefficients) {}
 
-  double get_value(const double x) const {
+  constexpr double get_value(const double x) const {
     return coefficients[0];
   }
 
-  std::array<double, 1> get_component_value(const double x) const {
+  constexpr std::array<double, 1> get_component_value(const double x) const {
     return coefficients;
   }
 
-  Polynomial<0> get_derivative () const {
+  constexpr Polynomial<0> get_derivative () const {
     return Polynomial<0>({0});
   }
 
-  std::array<double, 1> get_coefficients () const {
+  constexpr std::array<double, 1> get_coefficients () const {
     return coefficients;
   }
 
-  size_t get_degree() const {
+  constexpr size_t get_degree() const {
     return 0;
   }
 
@@ -89,7 +89,7 @@ private:
 };
 
 template<size_t degree>
-std::array<std::array<double, degree+1>, degree+1> get_coefficients_of_poly_and_all_derivatives(const Polynomial<degree>& poly) {
+constexpr std::array<std::array<double, degree+1>, degree+1> get_coefficients_of_poly_and_all_derivatives(const Polynomial<degree>& poly) {
   std::array<std::array<double, degree+1>, degree+1> ans;
   ans[0] = poly.get_coefficients();
   const auto poly_d = poly.get_derivative();
@@ -106,7 +106,7 @@ std::array<std::array<double, degree+1>, degree+1> get_coefficients_of_poly_and_
 }
 
 template<>
-std::array<std::array<double, 1>, 1> get_coefficients_of_poly_and_all_derivatives<0>(const Polynomial<0>& poly) {
+constexpr std::array<std::array<double, 1>, 1> get_coefficients_of_poly_and_all_derivatives<0>(const Polynomial<0>& poly) {
   return {0};
 }
 

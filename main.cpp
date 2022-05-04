@@ -111,13 +111,13 @@
 //   chs.print();
 //   std::cout << '\n';
 //
-//   const auto hs = HermiteSplines<degree, n_points, dimensions>(p);
+//   constexpr auto hs = HermiteSplines<degree, n_points, dimensions>(p);
 //   std::cout << "Hermite Spline" << '\n';
 //   hs.print();
 //   std::cout << '\n';
 //   return 0;
 // }
-
+//
 // int main () {
 //   std::array<std::array<double, 4>, 1> m1 = {
 //     {1,2,3,4}
@@ -209,40 +209,79 @@
 //     return 0;
 // }
 
+// constexpr size_t degree = 3;
+// constexpr size_t dimensions = 2;
+// constexpr size_t n_points = 10;
+//
+// // To check if compile time evaluation is performed
+// constexpr BezierCurve<degree, n_points, dimensions> f() {
+//     if (std::is_constant_evaluated()) {
+//         constexpr std::array<std::array<double, dimensions>, degree+1> weights = {
+//             Point<dimensions>{-1.0,  0.0},
+//             Point<dimensions>{-0.5,  0.5},
+//             Point<dimensions>{ 0.5, -0.5},
+//             Point<dimensions>{ 1.0,  0.0},
+//         };
+//
+//         constexpr BezierCurve<degree, n_points, dimensions> bezier(weights);
+//         return bezier;
+//     } else {
+//       std::array<std::array<double, dimensions>, degree+1> weights = {
+//           Point<dimensions>{-2.0,  0.0},
+//           Point<dimensions>{-1.0,  1.0},
+//           Point<dimensions>{ 1.0, -1.0},
+//           Point<dimensions>{ 2.0,  0.0},
+//       };
+//       BezierCurve<degree, n_points, dimensions> bezier(weights);
+//       return bezier;
+//     }
+//
+// }
+//
+// int main() {
+//     constexpr auto bezier_constexpr = f();
+//     bezier_constexpr.print();
+//     std::cout << '\n';
+//     auto bezier = f();
+//     bezier.print();
+//     return 0;
+// }
+
 constexpr size_t degree = 3;
 constexpr size_t dimensions = 2;
 constexpr size_t n_points = 10;
 
 // To check if compile time evaluation is performed
-constexpr BezierCurve<degree, n_points, dimensions> f() {
+constexpr HermiteSplines<degree, n_points, dimensions> f() {
     if (std::is_constant_evaluated()) {
-        constexpr std::array<std::array<double, dimensions>, degree+1> weights = {
-            Point<dimensions>{-1.0,  0.0},
-            Point<dimensions>{-0.5,  0.5},
-            Point<dimensions>{ 0.5, -0.5},
-            Point<dimensions>{ 1.0,  0.0},
-        };
-
-        constexpr BezierCurve<degree, n_points, dimensions> bezier(weights);
-        return bezier;
-    } else {
-      std::array<std::array<double, dimensions>, degree+1> weights = {
-          Point<dimensions>{-2.0,  0.0},
-          Point<dimensions>{-1.0,  1.0},
-          Point<dimensions>{ 1.0, -1.0},
-          Point<dimensions>{ 2.0,  0.0},
+      constexpr std::array<Point<dimensions>, degree+1> p = {
+        Point<dimensions>{0., 0.},
+        Point<dimensions>{4., 1.},
+        Point<dimensions>{0., 1.},
+        Point<dimensions>{0., 1.},
       };
-      BezierCurve<degree, n_points, dimensions> bezier(weights);
-      return bezier;
+
+      constexpr auto hs = HermiteSplines<degree, n_points, dimensions>(p);
+      return hs;
+    } else {
+      constexpr std::array<Point<dimensions>, degree+1> p = {
+        Point<dimensions>{0., 0.},
+        Point<dimensions>{1., 1.},
+        Point<dimensions>{0., 1.},
+        Point<dimensions>{0., 1.},
+      };
+
+      constexpr auto hs = HermiteSplines<degree, n_points, dimensions>(p);
+      return hs;
     }
 
 }
 
 int main() {
-    constexpr auto bezier_constexpr = f();
-    bezier_constexpr.print();
+    constexpr auto hs_constexpr = f();
+    hs_constexpr.print();
     std::cout << '\n';
-    auto bezier = f();
-    bezier.print();
+    auto hs = f();
+    hs.print();
     return 0;
 }

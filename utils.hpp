@@ -30,7 +30,7 @@ void debug_print(const std::array<T, N>& a){
 }
 
 template<size_t N>
-std::array<std::array<double, N>, N> inverse_using_LU_decomp(std::array<std::array<double, N>, N> mat) {
+constexpr std::array<std::array<double, N>, N> inverse_using_LU_decomp(std::array<std::array<double, N>, N> mat) {
   std::array<std::array<double, N>, N> p;
   std::array<std::array<double, N>, N> inversed_data;
   for (int i = 0; i < N; i++) {

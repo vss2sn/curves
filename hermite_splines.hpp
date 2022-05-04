@@ -9,7 +9,7 @@
 template<size_t degree, size_t n_points, size_t dimensions>
 class HermiteSplines {
 public:
-  explicit HermiteSplines(const std::array<Point<dimensions>, degree + 1> & p) : p(p) {
+  constexpr explicit HermiteSplines(const std::array<Point<dimensions>, degree + 1> & p) : p(p) {
     calculate_coefficients();
     const double delta_u = 1./(n_points - 1);
     double u = 0;
@@ -54,7 +54,7 @@ private:
   std::array<std::array<double, degree+1>, degree+1> coefficients_of_basis_curves;
   std::array<Point<dimensions>, n_points> points;
 
-  void calculate_coefficients() {
+  constexpr void calculate_coefficients() {
     // Explanation:
     // Given a polynomial Cn * x^(n) + Cn-1 * x^(n-1) + ... + C0
     // Need to find the coeffs Cn, Cn-1, ..., C0
@@ -75,7 +75,7 @@ private:
   }
 
   template<size_t I>
-  void compile_for(
+  constexpr void compile_for(
     const std::array<std::array<double, degree+1>, degree+1>& coeffecient_matrix_of_p_to_dnp,
     std::array<std::array<double, degree+1>, degree+1>& coeffs
   ) {

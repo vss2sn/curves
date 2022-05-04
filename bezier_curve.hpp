@@ -1,6 +1,9 @@
 #ifndef BEZIER_CURVE_HPP
 #define BEZIER_CURVE_HPP
 
+#include <array>
+#include <iostream>
+
 #include "binomial.hpp"
 #include "utils.hpp"
 

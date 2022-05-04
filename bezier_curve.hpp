@@ -10,8 +10,8 @@
 template <size_t degree, size_t n_points, size_t dimensions>
 class BezierCurve {
 public:
-  explicit BezierCurve(const std::array<Point<dimensions>, degree +1>& weights) noexcept : weights(weights) {
-    const std::array<int, degree + 1> binomial_coeffs = find_all_binomial_coefficients<degree>();
+  constexpr explicit BezierCurve(const std::array<Point<dimensions>, degree +1>& weights) : weights(weights) {
+    constexpr std::array<int, degree + 1> binomial_coeffs = find_all_binomial_coefficients<degree>();
     for (int i = 0; i < n_points; i++) {
       BinomialParamterValues<degree> p( i * 1./(n_points - 1));
       for (int j = 0; j < degree + 1; j++) {
@@ -84,7 +84,7 @@ public:
     return weights;
   }
 private:
-  std::array<Point<dimensions>, degree + 1> weights;
+  const std::array<Point<dimensions>, degree + 1> weights;
   std::array<Point<dimensions>, n_points> points;
   std::array<double, degree+1> coefficients;
 };

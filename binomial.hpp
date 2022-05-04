@@ -26,7 +26,7 @@ struct Binomial<0, 0> {
 };
 
 template<size_t ... N>
-std::array<int, sizeof ... (N) + 1> find_all_binomial_coefficients_impl (std::index_sequence<N ...>) {
+constexpr std::array<int, sizeof ... (N) + 1> find_all_binomial_coefficients_impl (std::index_sequence<N ...>) {
     constexpr std::array<int, sizeof ... (N) + 1> a =
       {
         Binomial<N, sizeof ... (N)>::val ...,
@@ -36,7 +36,7 @@ std::array<int, sizeof ... (N) + 1> find_all_binomial_coefficients_impl (std::in
 }
 
 template<int N>
-std::array<int, N+1> find_all_binomial_coefficients() {
+constexpr std::array<int, N+1> find_all_binomial_coefficients() {
   return find_all_binomial_coefficients_impl(std::make_index_sequence<N>());
 }
 
@@ -62,7 +62,7 @@ std::array<int, 1> pascals_triangle<0>() {
 template<size_t N>
 struct BinomialParamterValues {
 public:
-  explicit BinomialParamterValues(const double t) noexcept {
+  constexpr explicit BinomialParamterValues(const double t) noexcept {
     t_values[0] = 1;
     one_minus_t_values[N] = 1;
     for (int i = 1; i <= N; i++) {

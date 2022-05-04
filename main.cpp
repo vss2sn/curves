@@ -166,45 +166,83 @@
 //   return 0;
 // }
 
-constexpr size_t n_control_points = 4;
+// constexpr size_t n_control_points = 4;
+// constexpr size_t degree = 3;
+// constexpr size_t dimensions = 2;
+// constexpr size_t n_points = 10;
+//
+// // To check if compile time evaluation is performed
+// constexpr BSplineCurve<degree, n_control_points, n_points, dimensions> f() {
+//     if (std::is_constant_evaluated()) {
+//         constexpr std::array<std::array<double, dimensions>, n_control_points> control_points = {
+//             Point<dimensions>{-1.0,  0.0},
+//             Point<dimensions>{-0.5,  0.5},
+//             Point<dimensions>{ 0.5, -0.5},
+//             Point<dimensions>{ 1.0,  0.0},
+//         };
+//
+//         constexpr std::array<int, n_control_points+degree+1> knots = {0,0,0,0,3,3,3,3};
+//         constexpr std::array<int, n_control_points> weights = {1,1,1,1};
+//         constexpr BSplineCurve<degree, n_control_points, n_points, dimensions> bspline(control_points, knots, weights);
+//         return bspline;
+//     } else {
+//       std::array<std::array<double, dimensions>, n_control_points> control_points = {
+//           Point<dimensions>{-2.0,  0.0},
+//           Point<dimensions>{-1.0,  1.0},
+//           Point<dimensions>{ 1.0, -1.0},
+//           Point<dimensions>{ 2.0,  0.0},
+//       };
+//       std::array<int, n_control_points+degree+1> knots = {0,0,0,0,3,3,3,3};
+//       std::array<int, n_control_points> weights = {1,1,1,1};
+//       BSplineCurve<degree, n_control_points, n_points, dimensions> bspline(control_points, knots, weights);
+//       return bspline;
+//     }
+//
+// }
+//
+// int main() {
+//     constexpr auto bspline_constexpr = f();
+//     bspline_constexpr.print();
+//     std::cout << '\n';
+//     auto bspline = f();
+//     bspline.print();
+//     return 0;
+// }
+
 constexpr size_t degree = 3;
 constexpr size_t dimensions = 2;
 constexpr size_t n_points = 10;
 
 // To check if compile time evaluation is performed
-constexpr BSplineCurve<degree, n_control_points, n_points, dimensions> f() {
+constexpr BezierCurve<degree, n_points, dimensions> f() {
     if (std::is_constant_evaluated()) {
-        constexpr std::array<std::array<double, dimensions>, n_control_points> control_points = {
+        constexpr std::array<std::array<double, dimensions>, degree+1> weights = {
             Point<dimensions>{-1.0,  0.0},
             Point<dimensions>{-0.5,  0.5},
             Point<dimensions>{ 0.5, -0.5},
             Point<dimensions>{ 1.0,  0.0},
         };
 
-        constexpr std::array<int, n_control_points+degree+1> knots = {0,0,0,0,3,3,3,3};
-        constexpr std::array<int, n_control_points> weights = {1,1,1,1};
-        constexpr BSplineCurve<degree, n_control_points, n_points, dimensions> bspline(control_points, knots, weights);
-        return bspline;
+        constexpr BezierCurve<degree, n_points, dimensions> bezier(weights);
+        return bezier;
     } else {
-      std::array<std::array<double, dimensions>, n_control_points> control_points = {
+      std::array<std::array<double, dimensions>, degree+1> weights = {
           Point<dimensions>{-2.0,  0.0},
           Point<dimensions>{-1.0,  1.0},
           Point<dimensions>{ 1.0, -1.0},
           Point<dimensions>{ 2.0,  0.0},
       };
-      std::array<int, n_control_points+degree+1> knots = {0,0,0,0,3,3,3,3};
-      std::array<int, n_control_points> weights = {1,1,1,1};
-      BSplineCurve<degree, n_control_points, n_points, dimensions> bspline(control_points, knots, weights);
-      return bspline;
+      BezierCurve<degree, n_points, dimensions> bezier(weights);
+      return bezier;
     }
 
 }
 
 int main() {
-    constexpr auto bspline_constexpr = f();
-    bspline_constexpr.print();
+    constexpr auto bezier_constexpr = f();
+    bezier_constexpr.print();
     std::cout << '\n';
-    auto bspline = f();
-    bspline.print();
+    auto bezier = f();
+    bezier.print();
     return 0;
 }

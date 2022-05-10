@@ -10,21 +10,20 @@
 #include "polynomials.hpp"
 #include "utils.hpp"
 
-// int main() {
-//   constexpr size_t degree = 3;
-//   std::array<Point<2>, degree+1> weights = {
-//     Point<2>{-1.0,  0.0},
-//     Point<2>{-0.5,  0.5},
-//     Point<2>{ 0.5, -0.5},
-//     Point<2>{ 1.0,  0.0},
-//   };
-//   BezierCurve<degree, 100, 2> b (weights);
-//   b.print();
-//   std::cout << '\n';
-//
-//
-//   return 0;
-// }
+int main() {
+  constexpr size_t degree = 3;
+  std::array<Point<2>, degree+1> weights = {
+    Point<2>{-1.0,  0.0},
+    Point<2>{-0.5,  0.5},
+    Point<2>{ 0.5, -0.5},
+    Point<2>{ 1.0,  0.0},
+  };
+  BezierCurve<degree, 100, 2> b (weights);
+  b.print();
+  std::cout << '\n';
+
+  return 0;
+}
 
 // int main() {
 //   std::array<Point<2>, 4> points = {
@@ -286,47 +285,47 @@
 //   return 0;
 // }
 
-constexpr int n_points = 10;
-constexpr int dimensions = 2;
-constexpr int N = 7;
-// To check if compile time evaluation is performed
-constexpr CatmullRomSpline<N, n_points, dimensions> f() {
-    if (std::is_constant_evaluated()) {
-      constexpr std::array<Point<dimensions>, N> p = {
-          Point<dimensions>{-4., 1.},
-          Point<dimensions>{-4., 1.},
-          Point<dimensions>{-2., -2.},
-          Point<dimensions>{0, 0},
-          Point<dimensions>{2, -3},
-          Point<dimensions>{3, 1},
-          Point<dimensions>{3, 1},
-      };
-
-      constexpr double tao = 1;
-      constexpr auto cms = CatmullRomSpline<N, n_points, dimensions>(p, tao);
-      return cms;
-    } else {
-      std::array<Point<dimensions>, N> p = {
-          Point<dimensions>{-5., 1.},
-          Point<dimensions>{-5., 1.},
-          Point<dimensions>{-2., -2.},
-          Point<dimensions>{0, 0},
-          Point<dimensions>{2, -3},
-          Point<dimensions>{4, 1},
-          Point<dimensions>{4, 1},
-      };
-
-      const double tao = 1;
-      auto cms = CatmullRomSpline<N, n_points, dimensions>(p, tao);
-      return cms;
-    }
-}
-
-int main() {
-  constexpr auto cms_constexpr = f();
-  cms_constexpr.print();
-  std::cout << '\n';
-  auto cms = f();
-  cms.print();
-  return 0;
-}
+// constexpr int n_points = 10;
+// constexpr int dimensions = 2;
+// constexpr int N = 7;
+// // To check if compile time evaluation is performed
+// constexpr CatmullRomSpline<N, n_points, dimensions> f() {
+//     if (std::is_constant_evaluated()) {
+//       constexpr std::array<Point<dimensions>, N> p = {
+//           Point<dimensions>{-4., 1.},
+//           Point<dimensions>{-4., 1.},
+//           Point<dimensions>{-2., -2.},
+//           Point<dimensions>{0, 0},
+//           Point<dimensions>{2, -3},
+//           Point<dimensions>{3, 1},
+//           Point<dimensions>{3, 1},
+//       };
+//
+//       constexpr double tao = 1;
+//       constexpr auto cms = CatmullRomSpline<N, n_points, dimensions>(p, tao);
+//       return cms;
+//     } else {
+//       std::array<Point<dimensions>, N> p = {
+//           Point<dimensions>{-5., 1.},
+//           Point<dimensions>{-5., 1.},
+//           Point<dimensions>{-2., -2.},
+//           Point<dimensions>{0, 0},
+//           Point<dimensions>{2, -3},
+//           Point<dimensions>{4, 1},
+//           Point<dimensions>{4, 1},
+//       };
+//
+//       const double tao = 1;
+//       auto cms = CatmullRomSpline<N, n_points, dimensions>(p, tao);
+//       return cms;
+//     }
+// }
+//
+// int main() {
+//   constexpr auto cms_constexpr = f();
+//   cms_constexpr.print();
+//   std::cout << '\n';
+//   auto cms = f();
+//   cms.print();
+//   return 0;
+// }

@@ -60,19 +60,16 @@ std::array<int, 1> pascals_triangle<0>() {
 }
 
 template<size_t N>
-struct BinomialParamterValues {
-public:
-  constexpr explicit BinomialParamterValues(const double t) noexcept {
-    t_values[0] = 1;
-    one_minus_t_values[N] = 1;
-    for (int i = 1; i <= N; i++) {
-      t_values[i] = t_values[i-1] * t;
-      one_minus_t_values[N-i] = one_minus_t_values[N-i+1] * (1-t);
-    }
-  }
-
+constexpr std::tuple<std::array<double, N+1>, std::array<double, N+1>> BinomialParamterValues(const double t) {
   std::array<double, N+1> t_values;
   std::array<double, N+1> one_minus_t_values;
-};
+  t_values[0] = 1;
+  one_minus_t_values[N] = 1;
+  for (int i = 1; i <= N; i++) {
+    t_values[i] = t_values[i-1] * t;
+    one_minus_t_values[N-i] = one_minus_t_values[N-i+1] * (1-t);
+  }
+  return {t_values, one_minus_t_values};
+}
 
 #endif  // BINOMAIAL_HPP

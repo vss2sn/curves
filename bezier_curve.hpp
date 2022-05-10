@@ -13,9 +13,9 @@ public:
   constexpr explicit BezierCurve(const std::array<Point<dimensions>, degree +1>& weights) : weights(weights) {
     constexpr std::array<int, degree + 1> binomial_coeffs = find_all_binomial_coefficients<degree>();
     for (int i = 0; i < n_points; i++) {
-      BinomialParamterValues<degree> p( i * 1./(n_points - 1));
+      const auto [t_values, one_minus_t_values] = BinomialParamterValues<degree>(i * 1./(n_points - 1));
       for (int j = 0; j < degree + 1; j++) {
-        coefficients[j] = binomial_coeffs[j] * p.t_values[j] * p.one_minus_t_values[j];
+        coefficients[j] = binomial_coeffs[j] * t_values[j] * one_minus_t_values[j];
       }
       for (int k = 0; k < dimensions; k++) {
         points[i][k] = 0;

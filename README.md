@@ -1,6 +1,6 @@
 # Curves #
 
-### This repository contains a set of classes to create curves in C++ ###
+### This repository contains a set of classes to create N-dimensional curves in C++ ###
 
 <a name="toc"></a>
 #### Table of contents: ####
